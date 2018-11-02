@@ -1,0 +1,12 @@
+// Add your native dependencies here:
+
+android {
+  defaultConfig {  
+    generatedDensities = []
+    applicationId = "org.nckubikefestival12th.nativescript"
+    multiDexEnabled true
+  }
+  aaptOptions {  
+    additionalParameters "--no-version-vectors"  
+  }  
+} 

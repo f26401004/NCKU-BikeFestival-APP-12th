@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "309069279460",
+    "firebase_url": "https://ncku-bikefestival-12th.firebaseio.com",
+    "project_id": "ncku-bikefestival-12th",
+    "storage_bucket": "ncku-bikefestival-12th.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:309069279460:android:eb725df658f173e2",
+        "android_client_info": {
+          "package_name": "org.nckubikefestival12th.nativescript"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "309069279460-32lpb3h67osb49t2vb8mnkb0nnlnd60c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmso172gJJDe0u1USnzbcm6tdImAlhAf4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
