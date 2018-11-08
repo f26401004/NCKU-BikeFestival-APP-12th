@@ -20,7 +20,9 @@
             <GridLayout ~mainContent columns="*" rows="*">
                 <Label class="message" :text="msg" col="0" row="0"/>
                 <StackLayout>
-                    <Button class="button" text="test"></Button>
+                    <Button class="button" text="FACEBOOK LOGIN" @tap="facebookLogin"></Button>
+                    <Button class="button" text="GOOGLE LOGIN" @tap="googleLogin"></Button>
+                    <Button class="button" text="LOGOUT" @tap="logout"></Button>
                 </StackLayout>
             </GridLayout>
         </RadSideDrawer>
@@ -28,10 +30,40 @@
 </template>
 
 <script>
+  import firebase from 'nativescript-plugin-firebase'
   export default {
     data() {
       return {
         msg: '12th NCKU Bike Festival'
+      }
+    },
+    methods: {
+      facebookLogin: function () {
+        firebase.login({
+          type: firebase.LoginType.FACEBOOK
+        }).then (
+          function (result) {
+            console.log(JSON.stringify(result))
+          },
+          function (error) {
+            console.log(error)
+          }
+        )
+      },
+      googleLogin: function () {
+        firebase.login({
+          type: firebase.LoginType.GOOGLE
+        }).then (
+          function (result) {
+            console.log(JSON.stringify(result))
+          },
+          function (error) {
+            console.log(error)
+          }
+        )
+      },
+      logout: function () {
+        firebase.logout()
       }
     }
   }
