@@ -6,6 +6,9 @@ android {
     applicationId = "org.nckubikefestival12th.nativescript"
     multiDexEnabled true
   }
+  dependencies {
+    implementation 'com.google.firebase:firebase-ml-vision:18.0.1'
+  }
   aaptOptions {  
     additionalParameters "--no-version-vectors"  
   }  
