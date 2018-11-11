@@ -1,22 +1,43 @@
 const state = {
-  authUser: 'test'
+  uid: '',
+  username: '',
+  userProfilePicUrl: ''
 }
 
 const getters = {
-  getAuthUser: (state, getters) => {
-    return state.authUser
+  getUserUID: (state, getters) => {
+    return state.uid
+  },
+  getUsername: (state, getters) => {
+    return state.username
+  },
+  getUserProfilePic: (state, getters) => {
+    return state.userProfilePicUrl
   }
 }
 
 const mutations = {
-  'SET_USER': (state, username) => {
-    state.authUser = username
+  'SET_UID': (state, uid) => {
+    state.uid = uid
+  },
+  'SET_USERNAME': (state, username) => {
+    state.username = username
+  },
+  'SET_USER_PROFILEPIC': (state, url) => {
+    state.userProfilePicUrl = url
   }
 }
 
 const actions = {
   login: ({commit, state}, data) => {
-    // TODO: login logic.
+    // store the user information
+    commit('SET_UID', data.uid)
+    commit('SET_USERNAME', data.name)
+    if (data.providers[1].id.indexOf('facebook') > -1) {
+      commit('SET_USER_PROFILEPIC', data.profileImageURL + '?width=1000&height=1000')
+    } else if (data.providers[1].id.indexOf('google') > -1) {
+      commit('SET_USER_PROFILEPIC', data.profileImageURL)
+    }
   }
 }
 
