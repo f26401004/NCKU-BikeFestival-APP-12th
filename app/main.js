@@ -8,6 +8,7 @@ const Applicaiton = require('tns-core-modules/application')
 const ApplicationSettings = require('tns-core-modules/application-settings')
 // import Firebase
 import Firebase from 'nativescript-plugin-firebase'
+
 // import store
 import store from './store/index'
 
