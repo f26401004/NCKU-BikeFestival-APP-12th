@@ -11,7 +11,7 @@
         <Label class="drawer-header" text="Drawer"/>
         <Label class="drawer-item" text="QR Code" @tap="$navigateTo(scannerPage)"/>
         <Label class="drawer-item" text="Sponsor" @tap="$navigateTo(sponsorPage)"/>
-        <Label class="drawer-item" text="Item 3"/>
+        <Label class="drawer-item" text="Message" @tap="$navigateTo(messagePage)"/>
         <Label class="drawer-item" :text="$store.getters.getAuthUser"/>
       </StackLayout>
       <AbsoluteLayout ~mainContent>
@@ -30,12 +30,14 @@
   import firebase from 'nativescript-plugin-firebase'
   import SponsorPage from './Sponsor.vue'
   import ScannerPage from './Scanner.vue'
+  import MessagePage from './Message.vue'
   import LoginPage from './Login.vue'
   export default {
     data: function () {
       return {
         sponsorPage: SponsorPage,
-        scannerPage: ScannerPage
+        scannerPage: ScannerPage,
+        messagePage: MessagePage
       }
     },
     mounted: async function () {
@@ -49,15 +51,12 @@
   }
 </script>
 
-<style>
-  ActionBar {
-    background-color: #53ba82;
-    color: #ffffff;
-  }
+<style scoped>
 
   .profile {
     width: 1000px;
     height: 1000px;
+    border-radius: 1000px;
   }
 
   .title {

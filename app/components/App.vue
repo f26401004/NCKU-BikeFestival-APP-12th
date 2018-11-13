@@ -17,5 +17,8 @@ export default {
 </script>
 
 <style>
-
+  ActionBar {
+    background-color: #53ba82;
+    color: #ffffff;
+  }
 </style>
