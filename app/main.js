@@ -1,10 +1,9 @@
 import Vue from 'nativescript-vue'
 import Vuex from 'vuex'
-import App from './components/App.vue'
 import MainPage from './components/Main.vue'
 import LoginPage from './components/Login.vue'
 import VueDevtools from 'nativescript-vue-devtools'
-const Applicaiton = require('tns-core-modules/application')
+// const Applicaiton = require('tns-core-modules/application')
 const ApplicationSettings = require('tns-core-modules/application-settings')
 // import Firebase
 import Firebase from 'nativescript-plugin-firebase'
@@ -23,13 +22,16 @@ Vue.config.silent = (TNS_ENV === 'production')
 Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer').RadSideDrawer)
 // register barcode scanner
 Vue.registerElement('MLKitBarcodeScanner', () => require('nativescript-plugin-firebase/mlkit/barcodescanning').MLKitBarcodeScanner)
+// register Mapbox component
+Vue.registerElement("Mapbox", () => require("nativescript-mapbox").MapboxView)
+
 Vue.use(Vuex)
 Vue.prototype.$store = store
 
 // test for application event.
-Applicaiton.on(Applicaiton.launchEvent, args => {
-  console.log('Root View: ' + args.root)
-})
+// Applicaiton.on(Applicaiton.launchEvent, args => {
+  // console.log('Root View: ' + args.root)
+// })
 
 // initialize firebase
 Firebase.init({
@@ -44,7 +46,9 @@ Firebase.init({
   error => {
     console.log(error)
   }
-)
+).catch(error => {
+  console.log(error)
+})
 
 new Vue({
   render: h => h('frame', [h(ApplicationSettings.getString('userUID') ? MainPage : LoginPage)])

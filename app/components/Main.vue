@@ -12,7 +12,7 @@
         <Label class="drawer-item" text="QR Code" @tap="$navigateTo(scannerPage)"/>
         <Label class="drawer-item" text="Sponsor" @tap="$navigateTo(sponsorPage)"/>
         <Label class="drawer-item" text="Message" @tap="$navigateTo(messagePage)"/>
-        <Label class="drawer-item" :text="$store.getters.getAuthUser"/>
+        <Label class="drawer-item" text="Map" @tap="$navigateTo(mapPage)"/>
       </StackLayout>
       <AbsoluteLayout ~mainContent>
         <StackLayout top="0" width="100%">
@@ -31,13 +31,15 @@
   import SponsorPage from './Sponsor.vue'
   import ScannerPage from './Scanner.vue'
   import MessagePage from './Message.vue'
+  import MapPage from './Map.vue'
   import LoginPage from './Login.vue'
   export default {
     data: function () {
       return {
         sponsorPage: SponsorPage,
         scannerPage: ScannerPage,
-        messagePage: MessagePage
+        messagePage: MessagePage,
+        mapPage: MapPage
       }
     },
     mounted: async function () {
