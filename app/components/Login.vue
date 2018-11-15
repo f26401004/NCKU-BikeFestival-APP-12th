@@ -57,11 +57,6 @@
 </script>
 
 <style scoped>
-    ActionBar {
-        background-color: #53ba82;
-        color: #ffffff;
-    }
-
     .title {
         text-align: left;
         padding-left: 16;
