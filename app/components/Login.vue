@@ -28,12 +28,8 @@
     methods: {
       facebookLogin: async function () {
         try {
-          const result = await firebase.login({
-            type: firebase.LoginType.FACEBOOK
-          })
-          // write user info in application settings
-          ApplicationSettings.setString('userUID', result.uid)
-          this.$store.dispatch('login', result)
+          // call login operation stored in store.
+          await this.$store.dispatch('login', 'facebook')
           this.$navigateTo(MainPage)
         } catch (error) {
           console.log(error)
@@ -41,12 +37,8 @@
       },
       googleLogin: async function () {
         try {
-          const result = await firebase.login({
-            type: firebase.LoginType.GOOGLE
-          })
-          // write user info in application settings
-          ApplicationSettings.setString('userUID', result.uid)
-          this.$store.dispatch('login', result)
+          // call login operation stored in store.
+          await this.$store.dispatch('login', 'google')
           this.$navugateTo(MainPage)
         } catch (error) {
           console.log(error)

@@ -13,6 +13,7 @@
         <Label class="drawer-item" text="Sponsor" @tap="$navigateTo(sponsorPage)"/>
         <Label class="drawer-item" text="Message" @tap="$navigateTo(messagePage)"/>
         <Label class="drawer-item" text="Map" @tap="$navigateTo(mapPage)"/>
+        <Label class="drawer-item" text="Achievement" @tap="$navigateTo(achievementPage)"></Label>
       </StackLayout>
       <AbsoluteLayout ~mainContent>
         <StackLayout top="0" width="100%">
@@ -32,6 +33,7 @@
   import ScannerPage from './Scanner.vue'
   import MessagePage from './Message.vue'
   import MapPage from './Map.vue'
+  import AchievementPage from './Achievement.vue'
   import LoginPage from './Login.vue'
   export default {
     data: function () {
@@ -39,7 +41,8 @@
         sponsorPage: SponsorPage,
         scannerPage: ScannerPage,
         messagePage: MessagePage,
-        mapPage: MapPage
+        mapPage: MapPage,
+        achievementPage: AchievementPage
       }
     },
     mounted: async function () {

@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import MainPage from './components/Main.vue'
 import LoginPage from './components/Login.vue'
 import VueDevtools from 'nativescript-vue-devtools'
-// const Applicaiton = require('tns-core-modules/application')
+const Application = require('tns-core-modules/application')
 const ApplicationSettings = require('tns-core-modules/application-settings')
 // import Firebase
 import Firebase from 'nativescript-plugin-firebase'
@@ -28,16 +28,41 @@ Vue.registerElement("Mapbox", () => require("nativescript-mapbox").MapboxView)
 Vue.use(Vuex)
 Vue.prototype.$store = store
 
-// test for application event.
-// Applicaiton.on(Applicaiton.launchEvent, args => {
-  // console.log('Root View: ' + args.root)
-// })
+// register exit event to update online info
+if (Application.android) {
+  Application.android.on(Application.AndroidApplication.activityStartedEvent, function (args) {
+    // TODO: update online info to true if login
+    
+  })
+  Application.android.on(Application.AndroidApplication.activityStoppedEvent, function (args) {
+    // TODO: update online info to false if login
+    
+  })
+} else {
+  const CustomDelegate = (function (_user) {
+    __extends(CustomDelegate, _super)
+    function CustomDelegate () {
+      _super.apply(this, arguments)
+    }
+    CustomDelegate.prototype.applicationWillResignActive = function (application) {
+      // TODO: update online info to false
+    }
+    CustomDelegate.prototype.applicationWillEnterForeground = function (application) {
+      // TODO: update online info to true
+    }
+  })(UIResponder)
+  Applicaiton.ios.delegate = CustomDelegate
+}
 
 // initialize firebase
 Firebase.init({
   persist: true,
-  onAuthStateChanged: function (data) {
+  onAuthStateChanged: async function (data) {
     console.log((data.loggedIn ? "Logged in to firebase" : "Logged out from firebase") + " (init's onAuthStateChanged callback)")
+    // update user infomation
+    if (data.loggedIn) {
+      await Vue.prototype.$store.dispatch('regainUser')
+    }
   }
 }).then (
   () => {
