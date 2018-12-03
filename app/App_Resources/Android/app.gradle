@@ -7,7 +7,6 @@ android {
     multiDexEnabled true
   }
   dependencies {
-    implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.google.firebase:firebase-ml-vision:18.0.1'
   }
@@ -16,7 +15,7 @@ android {
   }  
   configurations.all {
     resolutionStrategy {
-      force 'com.google.android.gms:play-services-location:16.0.0'
+      force 'com.google.android.gms:play-services-location:16.0.1'
     }
   }
 } 

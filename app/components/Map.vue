@@ -31,7 +31,6 @@
   export default {
     data: function () {
       return {
-        accessToken: 'secrete key here',
         map: null
       }
     },
@@ -51,12 +50,7 @@
                 title: this.$store.getters.getUsername,
                 subtitle: "Test subtitle"
               }
-            ]);
-            this.map.trackUser({
-              mode: "FOLLOW_WITH_HEADING",
-              animated: true
-            })
-            this.map.getViewport()
+            ])
           }
         } catch (error) {
           console.log(error)

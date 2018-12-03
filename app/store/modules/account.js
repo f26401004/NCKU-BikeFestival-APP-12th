@@ -1,3 +1,7 @@
+const Firebase = require('nativescript-plugin-firebase')
+const Applicaiton = require('tns-core-modules/application')
+const ApplicationSettings = require('tns-core-modules/application-settings')
+
 const state = {
   uid: '',
   username: '',
@@ -29,14 +33,59 @@ const mutations = {
 }
 
 const actions = {
-  login: ({commit, state}, data) => {
-    // store the user information
-    commit('SET_UID', data.uid)
-    commit('SET_USERNAME', data.name)
-    if (data.providers[1].id.indexOf('facebook') > -1) {
-      commit('SET_USER_PROFILEPIC', data.profileImageURL + '?width=1000&height=1000')
-    } else if (data.providers[1].id.indexOf('google') > -1) {
-      commit('SET_USER_PROFILEPIC', data.profileImageURL)
+  login: async ({commit, state}, type) => {
+    try {
+      const result = await Firebase.login({
+        type: type
+      })
+      ApplicationSettings.setString('userUID', result.uid)
+      // store the user information
+      commit('SET_UID', result.uid)
+      commit('SET_USERNAME', result.name)
+      if (type === 'facebook') {
+        commit('SET_USER_PROFILEPIC', result.profileImageURL + '?width=1000&height=1000')
+      } else if (type === 'google') {
+        commit('SET_USER_PROFILEPIC', result.profileImageURL)
+      }
+      console.log('test')
+      // register new user to database.
+      const register = Firebase.functions.httpsCallable('newUser')
+      await register({
+        uid: result.uid,
+        username: result.name
+      })
+      // update online info to true
+      const online = Firebase.functions.httpsCallable('onlineRefresh')
+      await online({
+        uid: result.uid,
+        value: 1
+      })
+      console.log('success')
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  regainUser: async ({commit, state}) => {
+    try {
+      const result = await Firebase.getCurrentUser()
+      const type = result.providers[1].id
+      // store the user information
+      commit('SET_UID', result.uid)
+      commit('SET_USERNAME', result.name)
+      if (type === 'facebook') {
+        commit('SET_USER_PROFILEPIC', result.profileImageURL + '?width=1000&height=1000')
+      } else if (type === 'google') {
+        commit('SET_USER_PROFILEPIC', result.profileImageURL)
+      }
+      // update online info to true
+      const online = Firebase.functions.httpsCallable('onlineRefresh')
+      await online({
+        uid: result.uid,
+        value: 1
+      })
+      console.log('success')
+    } catch (error) {
+      console.log(error)
     }
   }
 }
