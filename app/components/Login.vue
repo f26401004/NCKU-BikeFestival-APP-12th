@@ -39,7 +39,7 @@
         try {
           // call login operation stored in store.
           await this.$store.dispatch('login', 'google')
-          this.$navugateTo(MainPage)
+          this.$navigateTo(MainPage)
         } catch (error) {
           console.log(error)
         }
