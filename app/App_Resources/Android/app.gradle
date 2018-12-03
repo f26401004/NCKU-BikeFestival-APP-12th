@@ -7,15 +7,22 @@ android {
     multiDexEnabled true
   }
   dependencies {
+    compile 'com.android.support:multidex:1.0.3'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.google.firebase:firebase-ml-vision:18.0.1'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
   }
   aaptOptions {  
     additionalParameters "--no-version-vectors"  
-  }  
+  }
   configurations.all {
-    resolutionStrategy {
-      force 'com.google.android.gms:play-services-location:16.0.1'
-    }
+      resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+          def requested = details.requested
+          if (requested.group == "com.android.support") {
+              if (!requested.name.startsWith("multidex")) {
+                  details.useVersion "27.+"
+              }
+          }
+      }
   }
 } 

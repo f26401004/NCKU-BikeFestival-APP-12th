@@ -48,7 +48,7 @@
     mounted: async function () {
       const result = await firebase.getCurrentUser()
       if (result) {
-        this.$store.dispatch('login', result)
+        this.$store.dispatch('regainUser')
       }
     },
     methods: {
