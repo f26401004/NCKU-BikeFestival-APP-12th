@@ -69,17 +69,19 @@ const actions = {
     try {
       const result = await Firebase.getCurrentUser()
       const type = result.providers[1].id
+      console.log(type)
       // store the user information
       commit('SET_UID', result.uid)
       commit('SET_USERNAME', result.name)
-      if (type === 'facebook') {
+      if (type === 'facebook.com') {
         commit('SET_USER_PROFILEPIC', result.profileImageURL + '?width=1000&height=1000')
-      } else if (type === 'google') {
+        console.log(state.userProfilePicUrl)
+      } else if (type === 'google.com') {
         commit('SET_USER_PROFILEPIC', result.profileImageURL)
       }
       // update online info to true
       const online = Firebase.functions.httpsCallable('onlineRefresh')
-      await online({
+      await online({S
         uid: result.uid,
         value: 1
       })
