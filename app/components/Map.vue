@@ -35,16 +35,14 @@
       }
     },
     mounted: async function () {
+      if (!Geolocation.isEnabled()) {
+        await Geolocation.enableLocationRequest()
+      }
     },
     methods: {
       onMapReady: async function (args) {
-        if (!Geolocation.isEnabled()) {
-          geolocation.enableLocationRequest();
-
-        }
         this.map = args.map
         try {
-          await Geolocation.enableLocationRequest()
           if (Geolocation.isEnabled()) {
             const result = await Geolocation.getCurrentLocation({ desiredAccuracy: Accuracy.high, maximumAge: 5000, timeout: 20000 })
             console.log(result)

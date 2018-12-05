@@ -11,6 +11,7 @@ android {
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.google.firebase:firebase-ml-vision:18.0.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.7.2'
   }
   aaptOptions {  
     additionalParameters "--no-version-vectors"  

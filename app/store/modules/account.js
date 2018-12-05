@@ -81,7 +81,7 @@ const actions = {
       }
       // update online info to true
       const online = Firebase.functions.httpsCallable('onlineRefresh')
-      await online({S
+      await online({
         uid: result.uid,
         value: 1
       })

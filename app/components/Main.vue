@@ -13,6 +13,7 @@
         <Label class="drawer-item" text="Sponsor" @tap="$navigateTo(sponsorPage)"/>
         <Label class="drawer-item" text="Message" @tap="$navigateTo(messagePage)"/>
         <Label class="drawer-item" text="Map" @tap="$navigateTo(mapPage)"/>
+        <Label class="drawer-item" text="Lesson" @tap="$navigateTo(lessonPage)"/>
         <Label class="drawer-item" text="Achievement" @tap="$navigateTo(achievementPage)"></Label>
       </StackLayout>
       <AbsoluteLayout ~mainContent>
@@ -35,6 +36,7 @@
   import MapPage from './Map.vue'
   import AchievementPage from './Achievement.vue'
   import LoginPage from './Login.vue'
+  import LessonPage from './Lesson.vue'
   export default {
     data: function () {
       return {
@@ -42,14 +44,15 @@
         scannerPage: ScannerPage,
         messagePage: MessagePage,
         mapPage: MapPage,
-        achievementPage: AchievementPage
+        achievementPage: AchievementPage,
+        lessonPage: LessonPage
       }
     },
     mounted: async function () {
-      const result = await firebase.getCurrentUser()
-      if (result) {
-        this.$store.dispatch('regainUser')
-      }
+      // const result = await firebase.getCurrentUser()
+      // if (result) {
+        // this.$store.dispatch('regainUser')
+      // }
     },
     methods: {
     }
