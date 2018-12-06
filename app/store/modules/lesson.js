@@ -12,7 +12,7 @@ const state = {
     nature: 0
   },
   grade: 1,
-  currentSyllabs: []
+  currentSyllabs: [],
 }
 
 const getters = {
@@ -67,20 +67,46 @@ const mutations = {
 }
 
 const actions = {
-  getLessonQuestion: async ({commit, state}, lid) => {
+  getLessonByType: async ({commit, state}, type) => {
     try {
-      // TODO: get lesson question.
+      const getLesson = Firebase.functions.httpsCallable('get')
     } catch (error) {
+      console.log(error)
     }
   },
-  checkLessonQuestion: async (({commit, state}, lid) => {
+  getLessonQuestion: async ({commit, state}, lid) => {
     try {
+      // TODO: get lesson question randomly.
+      const getQuestion = Firebase.functions.httpsCallable('getLessonQuestion')
+      const result = await getQuestion({
+        lid: lid
+      })
+      return result
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  checkLessonQuestion: async (({commit, state}, data) => {
+    try {
+      if (!data.lid) {
+        throw error('Lesson id is not defined!!')
+      }
+      if (!data.answer) {
+        throw error('Answer is not defined!!')
+      }
       // TODO: check if user answer is correct
       // and add the result to temp buffer
     } catch (error) {
-
+      console.log(error)
     }
-  })
+  }),
+  learningNow: async ({commit, state}) => {
+    if (!state.status) {
+      console.log('Start learning!!')
+    } else {
+      console.log('You are under learning!!')
+    }
+  }
 }
 
 export default {

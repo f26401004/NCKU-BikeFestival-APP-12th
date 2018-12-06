@@ -4,6 +4,7 @@ import MainPage from './components/Main.vue'
 import LoginPage from './components/Login.vue'
 import VueDevtools from 'nativescript-vue-devtools'
 const Application = require('tns-core-modules/application')
+const FrameModule = require("ui/frame");
 const ApplicationSettings = require('tns-core-modules/application-settings')
 // import Firebase
 import Firebase from 'nativescript-plugin-firebase'
@@ -38,6 +39,7 @@ if (Application.android) {
     // TODO: update online info to false if login
     
   })
+
 } else {
   const CustomDelegate = (function (_user) {
     __extends(CustomDelegate, _super)

@@ -16,7 +16,6 @@
 </template>
 
 <script>
-  const ApplicationSettings = require('tns-core-modules/application-settings')
   import firebase from 'nativescript-plugin-firebase'
   import MainPage from './Main.vue'
   export default {
@@ -30,7 +29,9 @@
         try {
           // call login operation stored in store.
           await this.$store.dispatch('login', 'facebook')
-          this.$navigateTo(MainPage)
+          this.$navigateTo(MainPage, {
+            clearHistory: true
+          })
         } catch (error) {
           console.log(error)
         }
@@ -39,7 +40,9 @@
         try {
           // call login operation stored in store.
           await this.$store.dispatch('login', 'google')
-          this.$navigateTo(MainPage)
+          this.$navigateTo(MainPage, {
+            clearHistory: true
+          })
         } catch (error) {
           console.log(error)
         }

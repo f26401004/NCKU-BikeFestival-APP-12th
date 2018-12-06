@@ -38,6 +38,7 @@
   import LoginPage from './Login.vue'
   import LessonPage from './Lesson.vue'
   export default {
+    name: 'Main Page',
     data: function () {
       return {
         sponsorPage: SponsorPage,
@@ -49,6 +50,7 @@
       }
     },
     mounted: async function () {
+
       // const result = await firebase.getCurrentUser()
       // if (result) {
         // this.$store.dispatch('regainUser')
