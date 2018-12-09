@@ -4,7 +4,7 @@ import MainPage from './components/Main.vue'
 import LoginPage from './components/Login.vue'
 import VueDevtools from 'nativescript-vue-devtools'
 const Application = require('tns-core-modules/application')
-const FrameModule = require("ui/frame");
+const FrameModule = require("ui/frame")
 const ApplicationSettings = require('tns-core-modules/application-settings')
 // import Firebase
 import Firebase from 'nativescript-plugin-firebase'
@@ -29,32 +29,48 @@ Vue.registerElement("Mapbox", () => require("nativescript-mapbox").MapboxView)
 Vue.use(Vuex)
 Vue.prototype.$store = store
 
-// register exit event to update online info
+// register back event
 if (Application.android) {
-  Application.android.on(Application.AndroidApplication.activityStartedEvent, function (args) {
-    // TODO: update online info to true if login
-    
-  })
-  Application.android.on(Application.AndroidApplication.activityStoppedEvent, function (args) {
-    // TODO: update online info to false if login
-    
-  })
-
-} else {
-  const CustomDelegate = (function (_user) {
-    __extends(CustomDelegate, _super)
-    function CustomDelegate () {
-      _super.apply(this, arguments)
-    }
-    CustomDelegate.prototype.applicationWillResignActive = function (application) {
-      // TODO: update online info to false
-    }
-    CustomDelegate.prototype.applicationWillEnterForeground = function (application) {
-      // TODO: update online info to true
-    }
-  })(UIResponder)
-  Applicaiton.ios.delegate = CustomDelegate
+  Application.android.on(Application.AndroidApplication.activityBackPressedEvent, backEvent);
 }
+
+function backEvent () {
+  const currentPage = FrameModule.topmost().currentPage
+  console.log(currentPage)
+    if (currentPage && currentPage.exports && typeof currentPage.exports.backEvent === "function") {
+      currentPage.exports.backEvent(args)
+   }
+}
+
+// register resume event to update online info
+Application.on(Application.resumeEvent, function (args) {
+  if (Vue.prototype.$store.getters.getUserUID) {
+    const online = Firebase.functions.httpsCallable('onlineRefresh')
+    online({
+      uid: Vue.prototype.$store.getters.getUserUID,
+      value: 1
+    })
+  }
+})
+// register exit event to update online info
+Application.on(Application.suspendEvent, function (args) {
+  if (Vue.prototype.$store.getters.getUserUID) {
+    const online = Firebase.functions.httpsCallable('onlineRefresh')
+    online({
+      uid: Vue.prototype.$store.getters.getUserUID,
+      value: 0
+    })
+  }
+})
+Application.on(Application.exitEvent, function (args) {
+  if (Vue.prototype.$store.getters.getUserUID) {
+    const online = Firebase.functions.httpsCallable('onlineRefresh')
+    online({
+      uid: Vue.prototype.$store.getters.getUserUID,
+      value: 0
+    })
+  }
+})
 
 // initialize firebase
 Firebase.init({

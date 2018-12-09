@@ -9,10 +9,17 @@ const state = {
     language: 0,
     humanity: 0,
     logic: 0,
-    nature: 0
+    nature: 0,
+    general: 0
   },
   grade: 1,
-  currentSyllabs: [],
+  onGoing: {
+    language: [{Lid: 'UfOngRFCH9713EzgsbbR', Name: '英文', Grade: 1}, {Lid: 'RUDluSgyqSABRO0hdlC9', Name: '基礎國文', Grade: 1}],
+    humanity: [],
+    logic: [],
+    nature: [],
+    general: []
+  }
 }
 
 const getters = {
@@ -24,6 +31,9 @@ const getters = {
   },
   getUserLessonSpantime: (state, getters) => {
     return state.spantime
+  },
+  getUserLessonOnGoing: (state, getters) => {
+    return state.onGoing
   }
 }
 
@@ -53,40 +63,42 @@ const mutations = {
       console.log('now is under taking class, you can not add lesson.')
       return
     }
-    if (Array.isArray(data)) {
-      for (iter of data) {
-        state.currentSyllabs.push(iter)
+    const value = data.map(target => {
+      return {
+        lid: data.Id,
+        Name: data.Name
       }
-      return
-    }
-    if (typeof data === 'string') {
-      state.currentSyllabs.push(data)
-      return
-    }
+    })
+    state.onGoing[data.type.toLowerCase()].push(value)
   }
 }
 
 const actions = {
-  getLessonByType: async ({commit, state}, type) => {
+  getLessonByType: async ({commit, state, rootState}, type) => {
     try {
-      const getLesson = Firebase.functions.httpsCallable('get')
-    } catch (error) {
-      console.log(error)
-    }
-  },
-  getLessonQuestion: async ({commit, state}, lid) => {
-    try {
-      // TODO: get lesson question randomly.
-      const getQuestion = Firebase.functions.httpsCallable('getLessonQuestion')
-      const result = await getQuestion({
-        lid: lid
+      const getLesson = Firebase.functions.httpsCallable('getLessonByType')
+      const result = await getLesson({
+        type: type,
+        uid: rootState.account.uid
       })
       return result
     } catch (error) {
       console.log(error)
     }
   },
-  checkLessonQuestion: async (({commit, state}, data) => {
+  getLessonQuestion: async ({commit, state}, data) => {
+    try {
+      const getQuestion = Firebase.functions.httpsCallable('getLessonQuestionByLidAndType')
+      const result = await getQuestion({
+        lid: data.lid,
+        type: data.type
+      })
+      return result
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  checkLessonQuestion: async ({commit, state}, data) => {
     try {
       if (!data.lid) {
         throw error('Lesson id is not defined!!')
@@ -99,10 +111,27 @@ const actions = {
     } catch (error) {
       console.log(error)
     }
-  }),
-  learningNow: async ({commit, state}) => {
+  },
+  learningNow: async ({commit, state, rootState}) => {
     if (!state.status) {
-      console.log('Start learning!!')
+      // TODO: add lesson to user database
+      const chooseLesson = Firebase.functions.httpsCallable('chooseLesson')
+      const type = ['Language', 'Humanity', 'Logic', 'Nature', 'General']
+      for (let iter of type) {
+        await chooseLesson({
+          uid: rootState.account.uid,
+          type: iter,
+          lessons: state.onGoing[iter.toLowerCase()]
+        })
+      }
+      // start learning
+      const learningNow = Firebase.functions.httpsCallable('learningNow')
+      await learningNow({
+        uid: state.uid
+      })
+      for (let iter of Object.keys(state.onGoing)) {
+        state.spantime += state.onGoing[iter].length * 60
+      }
     } else {
       console.log('You are under learning!!')
     }

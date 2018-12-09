@@ -54,12 +54,6 @@ const actions = {
         uid: result.uid,
         username: result.name
       })
-      // update online info to true
-      const online = Firebase.functions.httpsCallable('onlineRefresh')
-      await online({
-        uid: result.uid,
-        value: 1
-      })
       console.log('success')
     } catch (error) {
       console.log(error)
