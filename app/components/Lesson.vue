@@ -18,7 +18,9 @@
         <Button row="0" col="0" text="選擇領域修課" @tap="$navigateTo(choosePage)"/>
         <Button row="0" col="1" text="開始修課" @tap="startLearn()"/>
       </GridLayout>
-      <Label text="目前課表如下"></Label>
+      <Label text="目前課表如下" horizontalAlignment="center"></Label>
+      <Label v-bind:text="`共 ${currentSyllabus.length * 2} 學分，預計需要花 ${currentSyllabus.length * 5} 分鐘修課`"  
+        horizontalAlignment="center"/>
       <ScrollView>
         <StackLayout>
         
@@ -35,14 +37,20 @@
   export default {
     data: function () {
       return {
-        currentSyllabus: [],
         choosePage: ChoosePage
       }
     },
     mounted: function () {
-      const allLesson = this.$store.getters.getUserLessonOnGoing
-      for (let type of Object.keys(allLesson)) {
-        this.currentSyllabus = this.currentSyllabus.concat(allLesson[type])
+    },
+    computed: {
+      currentSyllabus: function () {
+        let result = []
+        const allLesson = this.$store.getters.getUserLessonOnGoing
+        for (let type of Object.keys(allLesson)) {
+          result = result.concat(allLesson[type])
+        }
+        return result
+        
       }
     },
     methods: {

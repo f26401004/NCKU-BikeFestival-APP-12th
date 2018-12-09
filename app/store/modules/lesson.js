@@ -19,6 +19,13 @@ const state = {
     logic: [],
     nature: [],
     general: []
+  },
+  finished: {
+    language: [],
+    humanity: [],
+    logic: [],
+    nature: [],
+    general: []
   }
 }
 
@@ -58,18 +65,12 @@ const mutations = {
       state.attribute['nature'] += data['nature']
     }
   },
-  'ADD_LESSON_SYLLABUS': (state, data) => {
+  'ADD_LESSON_ONGOING': (state, data) => {
     if (state.status === true) {
       console.log('now is under taking class, you can not add lesson.')
       return
     }
-    const value = data.map(target => {
-      return {
-        lid: data.Id,
-        Name: data.Name
-      }
-    })
-    state.onGoing[data.type.toLowerCase()].push(value)
+    state.onGoing[data.type.toLowerCase()].push(data.value)
   }
 }
 

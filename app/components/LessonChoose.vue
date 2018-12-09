@@ -10,7 +10,9 @@
         <TabViewItem v-for="(iter, index) of tabsEName" v-bind:key="iter" v-bind:title="tabsCName[index]">
           <ScrollView>
             <StackLayout>
-            <Button v-for="lesson of allLesson[iter.toLowerCase()]" v-bind:key="lesson.Lid" v-bind:class="{unable: checkLesson(lesson.Lid)}" v-bind:text="lesson.Name"/>
+            <Button v-for="lesson of allLesson[iter.toLowerCase()]" v-bind:key="lesson.Lid" 
+              v-bind:class="{unable: checkLesson(lesson.Lid, iter)}" v-bind:text="lesson.Name"
+              @tap="chooseLesson(lesson, iter)" />
             </StackLayout>
           </ScrollView>
         </TabViewItem>
@@ -54,11 +56,22 @@
         }
         
       },
-      checkLesson: function (lid) {
-        for (let type of Object.keys(this.$store.getters.getUserLessonOnGoing)) {
-          const lessons = this.$store.getters.getUserLessonOnGoing[type]
-          return (lessons.find(target => target.Lid === lid)) ? true : false
+      checkLesson: function (lid, type) {
+        const lessons = this.$store.getters.getUserLessonOnGoing[type.toLowerCase()]
+        return (lessons.find(target => target.Lid === lid)) ? true : false
+      },
+      chooseLesson: function (lesson, type) {
+        console.log(type)
+        if (this.$store.getters.getUserLessonOnGoing[type.toLowerCase()].indexOf(lesson) > 0) {
+          return
         }
+        // console.log(this.$store.getters.getUserLessonOnGoing[type.toLowerCase()])
+        const data = {
+          type: type,
+          value: lesson
+        }
+        this.$store.commit('ADD_LESSON_ONGOING', data)
+
       }
     }
   }

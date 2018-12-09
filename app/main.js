@@ -29,18 +29,6 @@ Vue.registerElement("Mapbox", () => require("nativescript-mapbox").MapboxView)
 Vue.use(Vuex)
 Vue.prototype.$store = store
 
-// register back event
-if (Application.android) {
-  Application.android.on(Application.AndroidApplication.activityBackPressedEvent, backEvent);
-}
-
-function backEvent () {
-  const currentPage = FrameModule.topmost().currentPage
-  console.log(currentPage)
-    if (currentPage && currentPage.exports && typeof currentPage.exports.backEvent === "function") {
-      currentPage.exports.backEvent(args)
-   }
-}
 
 // register resume event to update online info
 Application.on(Application.resumeEvent, function (args) {
