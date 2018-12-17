@@ -12,7 +12,7 @@
             <StackLayout>
             <Button v-for="lesson of allLesson[iter.toLowerCase()]" v-bind:key="lesson.Lid" 
               v-bind:class="{unable: checkLesson(lesson.Lid, iter)}" v-bind:text="lesson.Name"
-              @tap="chooseLesson(lesson, iter)" />
+              @tap="chooseLesson(lesson)" />
             </StackLayout>
           </ScrollView>
         </TabViewItem>
@@ -48,8 +48,10 @@
         try {
           const currentTabLesson = await this.$store.dispatch('getLessonByType', this.tabsEName[event.value])
           currentTabLesson.forEach(target => {
-            target.Type = this.tabsEName[this.currentIndex]
+            target.Type = this.tabsEName[event.value]
+            target.Loading = 0
           })
+          
           this.allLesson[this.tabsEName[event.value].toLowerCase()] = currentTabLesson
         } catch (error) {
           console.log(error)
@@ -57,21 +59,21 @@
         
       },
       checkLesson: function (lid, type) {
-        const lessons = this.$store.getters.getUserLessonOnGoing[type.toLowerCase()]
+        let lessons = this.$store.getters.getUserLessonOnGoing[type.toLowerCase()]
+        lessons = lessons.concat(this.$store.getters.getUserLessonFinished[type.toLowerCase()])
         return (lessons.find(target => target.Lid === lid)) ? true : false
       },
-      chooseLesson: function (lesson, type) {
-        console.log(type)
-        if (this.$store.getters.getUserLessonOnGoing[type.toLowerCase()].indexOf(lesson) > 0) {
+      chooseLesson: function (lesson) {
+        let index = this.$store.getters.getUserLessonOnGoing[lesson.Type.toLowerCase()].indexOf(lesson)
+        if (index > -1) {
+          this.$store.commit('REMOVE_LESSON_ONGOING', lesson)
           return
         }
-        // console.log(this.$store.getters.getUserLessonOnGoing[type.toLowerCase()])
-        const data = {
-          type: type,
-          value: lesson
+        index = this.$store.getters.getUserLessonFinished[lesson.Type.toLowerCase()].find(target => target.Lid === lesson.Lid)
+        if (index) {
+          return
         }
-        this.$store.commit('ADD_LESSON_ONGOING', data)
-
+        this.$store.commit('ADD_LESSON_ONGOING', lesson)
       }
     }
   }

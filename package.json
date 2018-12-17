@@ -10,13 +10,14 @@
       "version": "4.2.0"
     },
     "tns-android": {
-      "version": "5.0.0-2018-11-08-154817-01"
+      "version": "5.0.0"
     }
   },
   "dependencies": {
     "@vue/devtools": "5.0.0-beta.3",
     "nativescript": "^5.0.1",
     "nativescript-geolocation": "^4.3.1",
+    "nativescript-local-notifications": "^3.1.0",
     "nativescript-mapbox": "^4.3.1",
     "nativescript-plugin-firebase": "^7.4.1",
     "nativescript-socket.io": "^0.9.0",
@@ -28,7 +29,7 @@
     "tls": "0.0.1",
     "tns": "^0.2.0",
     "tns-android": "^5.0.0",
-    "tns-core-modules": "^5.2.0-2018-11-15-150731-01",
+    "tns-core-modules": "^5.1.0",
     "tns-ios": "^5.0.0",
     "vuex": "^3.0.1"
   },

@@ -4,7 +4,6 @@ const ApplicationSettings = require('tns-core-modules/application-settings')
 
 const state = {
   status: false,
-  spantime: 0,
   attribute: {
     language: 0,
     humanity: 0,
@@ -14,7 +13,7 @@ const state = {
   },
   grade: 1,
   onGoing: {
-    language: [{Lid: 'UfOngRFCH9713EzgsbbR', Name: '英文', Grade: 1}, {Lid: 'RUDluSgyqSABRO0hdlC9', Name: '基礎國文', Grade: 1}],
+    language: [],
     humanity: [],
     logic: [],
     nature: [],
@@ -36,20 +35,17 @@ const getters = {
   getUserLessonAttr: (state, getters) => {
     return state.attribute
   },
-  getUserLessonSpantime: (state, getters) => {
-    return state.spantime
-  },
   getUserLessonOnGoing: (state, getters) => {
     return state.onGoing
+  },
+  getUserLessonFinished: (state, getters) => {
+    return state.finished
   }
 }
 
 const mutations = {
   'SET_LESSON_STATUS': (state, status) => {
     state.status = status
-  },
-  'SET_LESSON_SPANTIME': (state, time) => {
-    state.spantime = time
   },
   'ADD_LESSON_ATTRIBUTE': (state, data) => {
     if (data['language']) {
@@ -70,7 +66,39 @@ const mutations = {
       console.log('now is under taking class, you can not add lesson.')
       return
     }
-    state.onGoing[data.type.toLowerCase()].push(data.value)
+    state.onGoing[data.Type.toLowerCase()].push(data)
+  },
+  'REMOVE_LESSON_ONGOING': (state, data) => {
+    if (state.status === true) {
+      console.log('now is under taking class, you can not remove lesson.')
+      return
+    }
+    const index = state.onGoing[data.Type.toLowerCase()].indexOf(data)
+    state.onGoing[data.type.toLowerCase()].splice(index, 1)
+  },
+  'REMOVE_ALL_LESSON_ONGOING': (state) => {
+    if (state.status === true) {
+      console.log('now is under taking class, you can not remove lesson.')
+      return
+    }
+    for (let type of Object.keys(state.onGoing)) {
+      state.onGoing[type] = []
+    }
+  },
+  'ADD_LESSON_FINISHED': (state, data) => {
+    if (state.status === false) {
+      console.log('now is not under taking class, you can not add lesson.')
+      return
+    }
+    state.finished[data.Type.toLowerCase()].push(data)
+  },
+  'ADD_LESSON_PROGRESS': (state, data) => {
+    if (state.status === false) {
+      console.log('now is not under taking class, you can not add lesson.')
+      return
+    }
+    const target = state.onGoing[data.Type.toLowerCase()].find(target => target.Lid === data.Lid)
+    target.Loading++
   }
 }
 
@@ -91,24 +119,21 @@ const actions = {
     try {
       const getQuestion = Firebase.functions.httpsCallable('getLessonQuestionByLidAndType')
       const result = await getQuestion({
-        lid: data.lid,
-        type: data.type
+        lid: data.Lid,
+        type: data.Type
       })
       return result
     } catch (error) {
       console.log(error)
     }
   },
-  checkLessonQuestion: async ({commit, state}, data) => {
+  addFinishLesson: async ({commit, state, rootState}, data) => {
     try {
-      if (!data.lid) {
-        throw error('Lesson id is not defined!!')
-      }
-      if (!data.answer) {
-        throw error('Answer is not defined!!')
-      }
-      // TODO: check if user answer is correct
-      // and add the result to temp buffer
+      const finishLesson = Firebase.functions.httpsCallable('finishLesson')
+      await finishLesson({
+        uid: rootState.account.uid,
+        lesson: data
+      })
     } catch (error) {
       console.log(error)
     }
@@ -128,11 +153,8 @@ const actions = {
       // start learning
       const learningNow = Firebase.functions.httpsCallable('learningNow')
       await learningNow({
-        uid: state.uid
+        uid: rootState.account.uid
       })
-      for (let iter of Object.keys(state.onGoing)) {
-        state.spantime += state.onGoing[iter].length * 60
-      }
     } else {
       console.log('You are under learning!!')
     }
